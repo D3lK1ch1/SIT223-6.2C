@@ -1,0 +1,49 @@
+//Send notif emails to specified email address at end of test & security scan
+//Notif emails include status of stage (success/failure) and logs as attachment
+pipeline{
+    agent any
+    stages{
+        stage('Build'){
+            steps{
+                //Build automation tool to compile and package code. Eg Maven
+            }
+        }
+        
+        stage('Unit and Integration Tests'){
+            steps{
+                //Run unit and integration tests. Specify test automation tools
+            }
+        }
+
+        stage('Code Analysis'){
+            steps{
+                //Code analysis tool
+            }
+        }
+
+        stage('Security Scan'){
+            steps{
+                //Perform security scan on code
+            }
+        }
+
+        stage('Deploy To Staging'){
+            steps{
+                //Application to staging server (AWS EC2)
+                }
+            }
+
+        
+        stage('Integration Tests on Staging'){
+            steps{
+                //Integration tests
+            }
+        }
+
+        stage('Deploy To Production'){
+            steps{
+                //To production server (AWS EC2)
+            }
+        }
+    }
+}

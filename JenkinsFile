@@ -1,48 +1,83 @@
-//Send notif emails to specified email address at end of test & security scan
-//Notif emails include status of stage (success/failure) and logs as attachment
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage('Build'){
-            steps{
-                //Build automation tool to compile and package code. Eg Maven
+    stages {
+        stage("Build") {
+            steps {
+                echo "Maven"
             }
-        }
-        
-        stage('Unit and Integration Tests'){
-            steps{
-                //Run unit and integration tests. Specify test automation tools
-            }
-        }
-
-        stage('Code Analysis'){
-            steps{
-                //Code analysis tool
-            }
-        }
-
-        stage('Security Scan'){
-            steps{
-                //Perform security scan on code
-            }
-        }
-
-        stage('Deploy To Staging'){
-            steps{
-                //Application to staging server (AWS EC2)
+            post {
+                success {
+                    emailext subject: "Commit successful",
+                              body: "Code committed to GitHub",
+                              to: "phantomknk@gmail.com",
+                              attachmentsPattern: '**/*.log' // Attach all log files
                 }
             }
-
-        
-        stage('Integration Tests on Staging'){
-            steps{
-                //Integration tests
+        }
+        stage("Unit and Integration Test") {
+            steps {
+                echo "JUnit"
+            }
+            post {
+                always { // This post block will always run, even if the stage fails
+                    archiveArtifacts artifacts: '**/*.log', // Archive all log files
+                                      allowEmptyArchive: true // Allow archiving even if no logs found
+                }
+                success {
+                    emailext subject: "Unit and Integration Test successful",
+                              body: "Unit and Integration tests passed",
+                              to: "phantomknk@gmail.com",
+                              attachmentsPattern: '**/*.log' // Attach all log files
+                }
+                failure {
+                    emailext subject: "Unit and Integration Test failed",
+                              body: "Unit and Integration tests failed",
+                              to: "phantomknk@gmail.com",
+                              attachmentsPattern: '**/*.log' // Attach all log files
+                }
             }
         }
-
-        stage('Deploy To Production'){
+        stage("Code analysis") {
+            steps {
+                echo "Using SonarQube scanner"
+            }
+        }
+        stage("Security Scan") {
+            steps {
+                echo "Using OWASP ZAP"
+            }
+            post {
+                always { // This post block will always run, even if the stage fails
+                    archiveArtifacts artifacts: '**/*.log', // Archive all log files
+                                      allowEmptyArchive: true // Allow archiving even if no logs found
+                }
+                success {
+                    emailext subject: "Security Scan successful",
+                              body: "Security scan passed",
+                              to: "phantomknk@gmail.com",
+                              attachmentsPattern: '**/*.log' // Attach all log files
+                }
+                failure {
+                    emailext subject: "Security Scan failed",
+                              body: "Security scan failed",
+                              to: "phantomknk@gmail.com",
+                              attachmentsPattern: '**/*.log' // Attach all log files
+                }
+            }
+        }
+        stage("Deploy to Staging"){
             steps{
-                //To production server (AWS EC2)
+                echo "Deployed to AWS EC2"
+            }
+        }
+        stage("Integration Tests on Staging"){
+            steps{
+                echo "Run integration test"
+            }
+        }
+        stage("Dedploy To Production"){
+            steps{
+                echo "Deployed to AWS EC2"
             }
         }
     }

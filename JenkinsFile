@@ -10,6 +10,7 @@ pipeline {
                         mail to: "phantomknk@gmail.com",
                         subject: "Code committed to GitHub",
                         body: "commit successful"
+                        attachLog: true
                 }
             }
         }

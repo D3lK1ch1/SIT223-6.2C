@@ -7,34 +7,15 @@ pipeline {
             }
             post {
                 success {
-                    emailext subject: "Commit successful",
-                              body: "Code committed to GitHub",
-                              to: "phantomknk@gmail.com",
-                              attachmentsPattern: '**/*.log' // Attach all log files
+                        mail to: "phantomknk@gmail.com",
+                        subject: "Code committed to GitHub",
+                        body: "commit successful"
                 }
             }
         }
         stage("Unit and Integration Test") {
             steps {
                 echo "JUnit"
-            }
-            post {
-                always { // This post block will always run, even if the stage fails
-                    archiveArtifacts artifacts: '**/*.log', // Archive all log files
-                                      allowEmptyArchive: true // Allow archiving even if no logs found
-                }
-                success {
-                    emailext subject: "Unit and Integration Test successful",
-                              body: "Unit and Integration tests passed",
-                              to: "phantomknk@gmail.com",
-                              attachmentsPattern: '**/*.log' // Attach all log files
-                }
-                failure {
-                    emailext subject: "Unit and Integration Test failed",
-                              body: "Unit and Integration tests failed",
-                              to: "phantomknk@gmail.com",
-                              attachmentsPattern: '**/*.log' // Attach all log files
-                }
             }
         }
         stage("Code analysis") {
@@ -46,24 +27,7 @@ pipeline {
             steps {
                 echo "Using OWASP ZAP"
             }
-            post {
-                always { // This post block will always run, even if the stage fails
-                    archiveArtifacts artifacts: '**/*.log', // Archive all log files
-                                      allowEmptyArchive: true // Allow archiving even if no logs found
-                }
-                success {
-                    emailext subject: "Security Scan successful",
-                              body: "Security scan passed",
-                              to: "phantomknk@gmail.com",
-                              attachmentsPattern: '**/*.log' // Attach all log files
-                }
-                failure {
-                    emailext subject: "Security Scan failed",
-                              body: "Security scan failed",
-                              to: "phantomknk@gmail.com",
-                              attachmentsPattern: '**/*.log' // Attach all log files
-                }
-            }
+            
         }
         stage("Deploy to Staging"){
             steps{

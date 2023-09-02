@@ -23,7 +23,7 @@ pipeline {
 
             post{
                 success {
-                    emailext attachLog: true, body: 'Commit successful', subject: 'GitHub commit', to: 'dhizkch@gmail.com'
+                    emailext attachLog: true, body: 'Commit successful', subject: 'GitHub commit', to: 'phantomknk@gmail.com'
                         
                 }
                 failure{

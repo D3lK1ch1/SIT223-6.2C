@@ -21,7 +21,7 @@ pipeline {
                 echo "Using OWASP ZAP"
             }
 
-            steps{
+            post{
                 success {
                     emailext attachLog: true, body: 'Commit successful', subject: 'GitHub commit', to: 'phantomknk@gmail.com'
                         

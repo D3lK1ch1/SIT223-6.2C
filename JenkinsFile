@@ -13,7 +13,7 @@ pipeline {
         }
         stage("Code analysis") {
             steps {
-                echo "Using SonarQube scanner"
+                echo "Using SonarQube scaner"
             }
         }
         stage("Security Scan") {

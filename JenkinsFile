@@ -5,14 +5,6 @@ pipeline {
             steps {
                 echo "Maven"
             }
-            post {
-                success {
-                        mail to: "phantomknk@gmail.com",
-                        subject: "Code committed to GitHub",
-                        body: "commit successful"
-                        attachLog: true
-                }
-            }
         }
         stage("Unit and Integration Test") {
             steps {
@@ -27,6 +19,16 @@ pipeline {
         stage("Security Scan") {
             steps {
                 echo "Using OWASP ZAP"
+            }
+
+            steps{
+                success {
+                    emailext attachLog: true, body: 'Commit successful', subject: 'GitHub commit', to: 'phantomknk@gmail.com'
+                        
+                }
+                failure{
+                    emailext attachLog: false, body: 'Commit fail', subject: 'GitHub commit', to: 'phantomknk@gmail.com'
+                }
             }
             
         }

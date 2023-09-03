@@ -42,7 +42,7 @@ pipeline {
                 echo "Run integration test"
             }
         }
-        stage("Dedploy To Production"){
+        stage("Deploy To Production"){
             steps{
                 echo "Deployed to AWS EC2"
             }
